@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coctail Media – April 2026 Performance Report</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#0b0d14;--card:#151822;--card2:#1d2135;
+  --accent:#6c63ff;--accent2:#06b6d4;--accent3:#f59e0b;
+  --green:#22c55e;--red:#ef4444;--yellow:#f59e0b;
+  --sw:#6c63ff;--pe:#06b6d4;--sm:#f59e0b;
+  --text:#e2e8f0;--muted:#64748b;--border:#252840;
+  --font:'Segoe UI',Tahoma,Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px}
+
+nav{position:sticky;top:0;z-index:99;background:#0d0f1a;border-bottom:1px solid var(--border);
+     padding:9px 22px;display:flex;align-items:center;gap:12px;overflow-x:auto;white-space:nowrap}
+nav a{color:var(--muted);text-decoration:none;font-size:12px;padding:4px 8px;border-radius:6px;transition:.2s}
+nav a:hover{color:var(--text);background:var(--card2)}
+nav a.sw{color:var(--sw)} nav a.pe{color:var(--pe)} nav a.sm{color:var(--sm)}
+.logo{font-weight:800;font-size:15px;color:var(--accent);margin-left:auto}
+
+.page{max-width:1400px;margin:0 auto;padding:24px 16px}
+section{margin-bottom:52px}
+h2{font-size:21px;font-weight:700;margin-bottom:18px;padding-bottom:10px;border-bottom:2px solid var(--accent)}
+h3{font-size:15px;font-weight:600;margin-bottom:12px;color:var(--accent2)}
+h2.sw{border-bottom-color:var(--sw)} h2.pe{border-bottom-color:var(--pe)} h2.sm{border-bottom-color:var(--sm)}
+
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:13px}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:16px 12px;text-align:center;transition:.2s}
+.kpi:hover{border-color:var(--accent);transform:translateY(-2px)}
+.kpi .label{font-size:11px;color:var(--muted);margin-bottom:5px}
+.kpi .value{font-size:22px;font-weight:800}
+.kpi .sub{font-size:10px;color:var(--muted);margin-top:3px}
+.kpi.g .value{color:var(--green)} .kpi.r .value{color:var(--red)}
+.kpi.y .value{color:var(--yellow)} .kpi.b .value{color:var(--accent)}
+.kpi.c .value{color:var(--accent2)}
+
+.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:768px){.charts-row{grid-template-columns:1fr}}
+.chart-wrap{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:16px}
+
+.funnel-wrap{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.funnel-step{flex:1;min-width:130px;background:var(--card);border:1px solid var(--border);border-radius:13px;padding:16px;text-align:center}
+.funnel-step .f-num{font-size:24px;font-weight:800;color:var(--accent)}
+.funnel-step .f-label{font-size:11px;color:var(--muted);margin-top:4px}
+.funnel-arrow{display:flex;flex-direction:column;align-items:center;font-size:20px;color:var(--muted)}
+.funnel-arrow .f-rate{font-size:11px;font-weight:700;margin-top:2px}
+.fbadge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;margin-top:6px}
+
+.tbl-wrap{overflow-x:auto;border-radius:11px;border:1px solid var(--border);margin-bottom:16px}
+table{width:100%;border-collapse:collapse;background:var(--card)}
+thead tr{background:var(--card2)}
+th{padding:10px 9px;font-size:11px;color:var(--muted);text-align:left;font-weight:600;white-space:nowrap}
+td{padding:9px 9px;border-bottom:1px solid var(--border);font-size:12px;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(108,99,255,.05)}
+.name-col{max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.xs{font-size:10px;color:var(--muted)}
+td.good{color:var(--green);font-weight:700} td.bad{color:var(--red);font-weight:700}
+
+.insight-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:13px}
+.insight{background:var(--card);border:1px solid var(--border);border-radius:11px;
+          padding:16px;border-left:4px solid var(--accent)}
+.insight.warn{border-left-color:var(--yellow)} .insight.bad{border-left-color:var(--red)}
+.insight.good{border-left-color:var(--green)}
+.insight h4{font-size:13px;font-weight:700;margin-bottom:7px}
+.insight p{font-size:12px;color:var(--muted);line-height:1.65}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:640px){.two-col{grid-template-columns:1fr}}
+
+.obj-section{border-radius:16px;padding:24px;margin-bottom:8px}
+.obj-section.sw{background:rgba(108,99,255,.06);border:1px solid rgba(108,99,255,.2)}
+.obj-section.pe{background:rgba(6,182,212,.06);border:1px solid rgba(6,182,212,.2)}
+.obj-section.sm{background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.2)}
+
+.obj-kpi-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:18px}
+.obj-kpi{border-radius:11px;padding:14px;text-align:center}
+.obj-kpi.sw{background:rgba(108,99,255,.12);border:1px solid rgba(108,99,255,.25)}
+.obj-kpi.pe{background:rgba(6,182,212,.12);border:1px solid rgba(6,182,212,.25)}
+.obj-kpi.sm{background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.25)}
+.obj-kpi .label{font-size:10px;color:var(--muted);margin-bottom:4px}
+.obj-kpi .value{font-size:20px;font-weight:800}
+.obj-kpi.sw .value{color:var(--sw)} .obj-kpi.pe .value{color:var(--pe)} .obj-kpi.sm .value{color:var(--sm)}
+.obj-kpi .sub{font-size:10px;color:var(--muted);margin-top:3px}
+
+.banner{background:linear-gradient(135deg,#14104a,#082430);border:1px solid var(--accent);
+         border-radius:15px;padding:26px 30px;margin-bottom:30px}
+.banner h1{font-size:24px;font-weight:800;color:var(--accent);margin-bottom:6px}
+.banner p{color:var(--muted);font-size:13px;line-height:1.9}
+.sec-badge{display:inline-block;font-size:10px;font-weight:700;padding:3px 10px;
+            border-radius:20px;margin-bottom:10px;color:#fff}
+.sec-badge.def{background:var(--accent)} .sec-badge.sw{background:var(--sw)}
+.sec-badge.pe{background:var(--pe);color:#000} .sec-badge.sm{background:var(--sm);color:#000}
+
+.badge-pill{padding:7px 13px;border-radius:7px;font-size:12px;margin-bottom:7px;display:block}
+.badge-pill.good{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:var(--green)}
+.badge-pill.bad{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:var(--red)}
+
+.obj-legend{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.obj-pill{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700}
+.obj-pill.sw{background:rgba(108,99,255,.2);color:var(--sw);border:1px solid rgba(108,99,255,.3)}
+.obj-pill.pe{background:rgba(6,182,212,.2);color:var(--pe);border:1px solid rgba(6,182,212,.3)}
+.obj-pill.sm{background:rgba(245,158,11,.2);color:var(--sm);border:1px solid rgba(245,158,11,.3)}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#overview">📊 Overview</a>
+  <a href="#daily">📅 Daily</a>
+  <a href="#funnel">🔻 Funnel</a>
+  <a href="#all-camps">📁 All Campaigns</a>
+  <a href="#sw" class="sw">🛒 Sales Website</a>
+  <a href="#pe" class="pe">👍 Post Engagement</a>
+  <a href="#sm" class="sm">💬 Sales Messages</a>
+  <a href="#problems">⚠️ Problems</a>
+  <a href="#insights">💡 Insights</a>
+  <span class="logo">Coctail Media · April 2026</span>
+</nav>
+
+<div class="page">
+
+<div class="banner">
+  <h1>📋 Coctail Media – Performance Report, April 2026</h1>
+  <p>
+    Total Spend: <strong style="color:#fff">96,578 EGP</strong> &nbsp;|&nbsp;
+    Purchases: <strong style="color:#22c55e">532</strong> &nbsp;|&nbsp;
+    Revenue: <strong style="color:#fff">810,677 EGP</strong> &nbsp;|&nbsp;
+    ROAS: <strong style="color:#22c55e">8.39x</strong> &nbsp;|&nbsp;
+    CPP: <strong style="color:#f59e0b">182 EGP</strong> &nbsp;|&nbsp;
+    CTR: <strong style="color:#22c55e">4.40%</strong>
+    <br><br>
+    3 campaign objectives active &nbsp;·&nbsp;
+    <span style="color:var(--sw)">Sales Website</span> drives all purchases &nbsp;·&nbsp;
+    <span style="color:var(--pe)">Post Engagement</span> spends 33% of budget with 0 purchases &nbsp;·&nbsp;
+    <span style="color:var(--sm)">Sales Messages</span> generates conversations but minimal sales
+  </p>
+</div>
+
+<!-- ═══════════ 1. OVERVIEW ═══════════ -->
+<section id="overview">
+  <span class="sec-badge def">Section 1</span>
+  <h2>📊 Account Overview – April 2026</h2>
+  <div class="kpi-grid">
+    <div class="kpi b"><div class="label">Total Spend</div><div class="value">96,578</div><div class="sub">EGP</div></div>
+    <div class="kpi g"><div class="label">Purchases</div><div class="value">532</div><div class="sub">orders</div></div>
+    <div class="kpi g"><div class="label">Revenue</div><div class="value">811K</div><div class="sub">EGP</div></div>
+    <div class="kpi g"><div class="label">ROAS</div><div class="value">8.39x</div><div class="sub">return on ad spend</div></div>
+    <div class="kpi g"><div class="label">CPP</div><div class="value">182</div><div class="sub">EGP / purchase</div></div>
+    <div class="kpi g"><div class="label">CTR</div><div class="value">4.40%</div><div class="sub">click-through rate</div></div>
+    <div class="kpi"><div class="label">CPM</div><div class="value">74.0</div><div class="sub">EGP / 1K impressions</div></div>
+    <div class="kpi"><div class="label">CPC</div><div class="value">1.68</div><div class="sub">EGP / click</div></div>
+    <div class="kpi"><div class="label">Reach</div><div class="value">850K</div><div class="sub">unique people</div></div>
+    <div class="kpi y"><div class="label">Frequency</div><div class="value">1.53x</div><div class="sub">avg per person</div></div>
+    <div class="kpi c"><div class="label">Add to Cart</div><div class="value">5,942</div><div class="sub">events</div></div>
+    <div class="kpi c"><div class="label">Checkout</div><div class="value">1,153</div><div class="sub">initiated</div></div>
+    <div class="kpi"><div class="label">View Content</div><div class="value">70,453</div><div class="sub">product views</div></div>
+    <div class="kpi"><div class="label">Messages</div><div class="value">987</div><div class="sub">conversations</div></div>
+  </div>
+  <br>
+  <div class="obj-legend">
+    <span class="obj-pill sw">🛒 Sales Website — 60,682 EGP (63% of budget) — 529 purchases</span>
+    <span class="obj-pill pe">👍 Post Engagement — 33,524 EGP (35% of budget) — 0 purchases</span>
+    <span class="obj-pill sm">💬 Sales Messages — 2,365 EGP (2% of budget)</span>
+  </div>
+  <div class="insight-grid">
+    <div class="insight good"><h4>✅ Excellent ROAS</h4><p>ROAS 8.39x is outstanding for e-commerce. For every 1 EGP spent you get 8.4 EGP back. Benchmark: 4x is good, 8x is exceptional.</p></div>
+    <div class="insight good"><h4>✅ Low CPP</h4><p>CPP 182 EGP is very healthy. Leaves strong margin for scaling. Target to keep below 300 EGP.</p></div>
+    <div class="insight bad"><h4>🔴 Post Engagement Spend</h4><p>33,524 EGP (35% of budget) on Post Engagement generated 0 purchases. This spend is purely for awareness/reach — clarify if that's intentional.</p></div>
+    <div class="insight warn"><h4>⚠️ High Frequency</h4><p>Frequency 1.53x — audience is seeing the same ads repeatedly. Risk of creative fatigue. Rotate creatives or expand audience.</p></div>
+    <div class="insight good"><h4>✅ Strong CTR</h4><p>CTR 4.40% is very high (benchmark ~1.5–2%). Ads are highly relevant to the audience. The funnel post-click needs attention.</p></div>
+    <div class="insight warn"><h4>⚠️ ATC → Purchase Drop</h4><p>5,942 add-to-carts but only 532 purchases (9.0% conversion). 5410 people added to cart but didn't buy.</p></div>
+  </div>
+</section>
+
+<!-- ═══════════ 2. DAILY ═══════════ -->
+<section id="daily">
+  <span class="sec-badge def">Section 2</span>
+  <h2>📅 Daily Performance – April 2026</h2>
+  <div class="charts-row">
+    <div class="chart-wrap"><h3>Daily Spend (EGP)</h3><canvas id="spendChart" height="200"></canvas></div>
+    <div class="chart-wrap"><h3>Daily Purchases</h3><canvas id="purChart" height="200"></canvas></div>
+  </div>
+  <br>
+  <div class="charts-row">
+    <div class="chart-wrap"><h3>Budget Split by Objective</h3><canvas id="splitChart" height="200"></canvas></div>
+    <div class="chart-wrap"><h3>Daily CTR (%)</h3><canvas id="ctrChart" height="200"></canvas></div>
+  </div>
+</section>
+
+<!-- ═══════════ 3. FUNNEL ═══════════ -->
+<section id="funnel">
+  <span class="sec-badge def">Section 3</span>
+  <h2>🔻 Conversion Funnel Analysis</h2>
+  <div class="funnel-wrap">
+    <div class="funnel-step"><div class="f-num">1,304,700</div><div class="f-label">Impressions</div></div>
+    <div class="funnel-arrow">→<div class="f-rate">4.4%</div></div>
+    <div class="funnel-step"><div class="f-num">57,422</div><div class="f-label">Clicks</div></div>
+    <div class="funnel-arrow">→<div class="f-rate">123%</div></div>
+    <div class="funnel-step"><div class="f-num">70,453</div><div class="f-label">View Content</div></div>
+    <div class="funnel-arrow" style="color:var(--red)">
+      →<div class="f-rate" style="color:var(--red)">8.4%</div>
+    </div>
+    <div class="funnel-step">
+      <div class="f-num">5,942</div><div class="f-label">Add to Cart</div>
+      <span class="fbadge" style="background:rgba(239,68,68,.2);color:#ef4444">🔴 8.4%</span>
+    </div>
+    <div class="funnel-arrow" style="color:var(--red)">
+      →<div class="f-rate" style="color:var(--red)">19.4%</div>
+    </div>
+    <div class="funnel-step">
+      <div class="f-num">1,153</div><div class="f-label">Checkout</div>
+      <span class="fbadge" style="background:rgba(245,158,11,.2);color:#f59e0b">🟡 19.4%</span>
+    </div>
+    <div class="funnel-arrow" style="color:var(--red)">
+      →<div class="f-rate" style="color:var(--red)">46.1%</div>
+    </div>
+    <div class="funnel-step">
+      <div class="f-num" style="color:var(--green)">532</div><div class="f-label">Purchases 🛒</div>
+      <span class="fbadge" style="background:rgba(239,68,68,.2);color:#ef4444">🔴 46.1%</span>
+    </div>
+  </div>
+  <br>
+  <div class="insight-grid">
+    <div class="insight bad"><h4>🔴 VC → ATC: 8.4% (Benchmark: 15–25%)</h4><p>Only 8.4% of product viewers add to cart. Product page needs stronger CTA, better images, and clearer pricing.</p></div>
+    <div class="insight bad"><h4>🔴 ATC → Checkout: 19.4% (Benchmark: 60–75%)</h4><p>4,789 cart abandoners with no retargeting. Set up 7-day ATC retargeting campaign with urgency offer.</p></div>
+    <div class="insight bad"><h4>🔴 Checkout → Purchase: 46.1% (Benchmark: 65–80%)</h4><p>621 near-buyers dropped at last step. Add COD option, trust badges, and remove checkout friction.</p></div>
+    <div class="insight"><h4>📊 Opportunity</h4><p>Improving VC→Purchase from 0.8% to 1.5% → 1056 buyers with same spend. CPP would drop to ~91 EGP.</p></div>
+  </div>
+</section>
+
+<!-- ═══════════ 4. ALL CAMPAIGNS ═══════════ -->
+<section id="all-camps">
+  <span class="sec-badge def">Section 4</span>
+  <h2>📁 All Campaigns – Full Overview</h2>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr>
+        <th>Campaign</th><th>Spend (EGP)</th><th>CTR</th><th>CPM</th><th>Freq</th>
+        <th>Purchases</th><th>ATC</th><th>Messages</th><th>CPP</th><th>ROAS</th>
+      </tr></thead>
+      <tbody><tr>
+          <td class="name-col">Post Engagement - April 2026</td>
+          <td>31,529</td>
+          <td>2.1%</td>
+          <td>46</td>
+          <td>2.48</td>
+          <td>—</td>
+          <td>8</td>
+          <td>19</td>
+          <td class="">—</td>
+          <td class="">—</td>
+        </tr><tr>
+          <td class="name-col">Sales Website - Prospecting_CBO_Sales - Copy</td>
+          <td>6,550</td>
+          <td>11.6%</td>
+          <td>179</td>
+          <td>2.35</td>
+          <td>70</td>
+          <td>887</td>
+          <td>45</td>
+          <td class="good">94</td>
+          <td class="good">18.00x</td>
+        </tr><tr>
+          <td class="name-col">Sales Website - 26 Nov 2024  ( Cairo / Alex )</td>
+          <td>6,536</td>
+          <td>6.7%</td>
+          <td>130</td>
+          <td>3.01</td>
+          <td>40</td>
+          <td>679</td>
+          <td>81</td>
+          <td class="good">163</td>
+          <td class="good">9.02x</td>
+        </tr><tr>
+          <td class="name-col">Sales Website - catalouge-nov 2024 -( Narrow )</td>
+          <td>6,396</td>
+          <td>9.6%</td>
+          <td>128</td>
+          <td>2.53</td>
+          <td>80</td>
+          <td>620</td>
+          <td>86</td>
+          <td class="good">80</td>
+          <td class="good">17.03x</td>
+        </tr><tr>
+          <td class="name-col">Sales Website - 21 Dec 2024 ( RT / LLK )</td>
+          <td>6,058</td>
+          <td>7.6%</td>
+          <td>128</td>
+          <td>2.74</td>
+          <td>36</td>
+          <td>546</td>
+          <td>71</td>
+          <td class="good">168</td>
+          <td class="good">9.02x</td>
+        </tr><tr>
+          <td class="name-col">Sales Website - Cardigans_11 Feb</td>
+          <td>5,997</td>
+          <td>6.3%</td>
+          <td>115</td>
+          <td>3.23</td>
+          <td>46</td>
+          <td>504</td>
+          <td>53</td>
+          <td class="good">130</td>
+          <td class="good">14.31x</td>
+        </tr><tr>
+          <td class="name-col">Sales Website - Catalouge - Sep 25 Sales ( Narrow ) - Cairo</td>
+          <td>5,897</td>
+          <td>9.0%</td>
+          <td>149</td>
+          <td>2.64</td>
+          <td>53</td>
+          <td>501</td>
+          <td>59</td>
+          <td class="good">111</td>
+          <td class="good">13.73x</td>
+        </tr><tr>
+          <td class="name-col">Sales Website - Menna Omran Video</td>
+          <td>5,591</td>
+          <td>10.5%</td>
+          <td>138</td>
+          <td>2.70</td>
+          <td>57</td>
+          <td>650</td>
+          <td>133</td>
+          <td class="good">98</td>
+          <td class="good">15.79x</td>
+        </tr><tr>
+          <td class="name-col">Sales Website - Prospecting_CBO</td>
+          <td>5,476</td>
+          <td>10.2%</td>
+          <td>121</td>
+          <td>2.38</td>
+          <td>63</td>
+          <td>600</td>
+          <td>74</td>
+          <td class="good">87</td>
+          <td class="good">18.09x</td>
+        </tr><tr>
+          <td class="name-col">Sales Website - Sale Only On website</td>
+          <td>5,456</td>
+          <td>6.5%</td>
+          <td>112</td>
+          <td>2.36</td>
+          <td>54</td>
+          <td>517</td>
+          <td>26</td>
+          <td class="good">101</td>
+          <td class="good">12.76x</td>
+        </tr><tr>
+          <td class="name-col">Sales Website - Summer - CA/LLK/B</td>
+          <td>4,094</td>
+          <td>5.8%</td>
+          <td>167</td>
+          <td>1.45</td>
+          <td>14</td>
+          <td>111</td>
+          <td>4</td>
+          <td class="good">292</td>
+          <td class="">4.09x</td>
+        </tr><tr>
+          <td class="name-col">Sales Messages _ 5 Feb</td>
+          <td>2,365</td>
+          <td>6.9%</td>
+          <td>42</td>
+          <td>2.98</td>
+          <td>3</td>
+          <td>40</td>
+          <td>305</td>
+          <td class="bad">788</td>
+          <td class="bad">2.88x</td>
+        </tr><tr>
+          <td class="name-col">Post Engagement - March 2026</td>
+          <td>1,994</td>
+          <td>1.1%</td>
+          <td>19</td>
+          <td>1.30</td>
+          <td>—</td>
+          <td>3</td>
+          <td>4</td>
+          <td class="">—</td>
+          <td class="">—</td>
+        </tr><tr>
+          <td class="name-col">Sales Website - Prospecting_CBO 2</td>
+          <td>1,694</td>
+          <td>11.7%</td>
+          <td>169</td>
+          <td>1.71</td>
+          <td>9</td>
+          <td>176</td>
+          <td>13</td>
+          <td class="good">188</td>
+          <td class="good">10.12x</td>
+        </tr><tr>
+          <td class="name-col">Sales Website - Summer Collection 2026 - Broad</td>
+          <td>534</td>
+          <td>7.0%</td>
+          <td>168</td>
+          <td>1.37</td>
+          <td>3</td>
+          <td>6</td>
+          <td>—</td>
+          <td class="good">178</td>
+          <td class="">5.89x</td>
+        </tr><tr>
+          <td class="name-col">Sales Website - Catalouge - EG - Winter</td>
+          <td>402</td>
+          <td>10.1%</td>
+          <td>120</td>
+          <td>1.70</td>
+          <td>4</td>
+          <td>94</td>
+          <td>11</td>
+          <td class="good">101</td>
+          <td class="good">6.63x</td>
+        </tr><tr>
+          <td class="name-col">Post Engagement - Branches</td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+          <td>3</td>
+          <td class="">—</td>
+          <td class="">—</td>
+        </tr></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════ 5. SALES WEBSITE ═══════════ -->
+<section id="sw">
+  <span class="sec-badge sw">Section 5 · Sales Website</span>
+  <h2 class="sw">🛒 Sales Website Campaigns</h2>
+
+  <div class="obj-kpi-row">
+    <div class="obj-kpi sw"><div class="label">Total Spend</div><div class="value">60,682</div><div class="sub">EGP</div></div>
+    <div class="obj-kpi sw"><div class="label">Purchases</div><div class="value">529</div><div class="sub">orders</div></div>
+    <div class="obj-kpi sw"><div class="label">Revenue</div><div class="value">804K</div><div class="sub">EGP</div></div>
+    <div class="obj-kpi sw"><div class="label">Blended CPP</div><div class="value">115</div><div class="sub">EGP</div></div>
+    <div class="obj-kpi sw"><div class="label">Blended ROAS</div><div class="value">13.25x</div><div class="sub"></div></div>
+    <div class="obj-kpi sw"><div class="label">Campaigns</div><div class="value">13</div><div class="sub">active</div></div>
+  </div>
+
+  <div class="obj-section sw">
+    <h3 style="color:var(--sw)">Campaign Breakdown</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Campaign</th><th>Spend</th><th>CTR</th><th>CPM</th><th>Freq</th>
+          <th>Purchases</th><th>ATC</th><th>Messages</th><th>CPP</th><th>ROAS</th></tr></thead>
+        <tbody><tr>
+          <td class="name-col">Sales Website - Prospecting_CBO_Sales - Copy</td>
+          <td>6,550</td>
+          <td>11.6%</td>
+          <td>179</td>
+          <td>2.35</td>
+          <td>70</td>
+          <td>887</td>
+          <td>45</td>
+          <td class="good">94</td>
+          <td class="good">18.00x</td>
+        </tr><tr>
+          <td class="name-col">Sales Website - 26 Nov 2024  ( Cairo / Alex )</td>
+          <td>6,536</td>
+          <td>6.7%</td>
+          <td>130</td>
+          <td>3.01</td>
+          <td>40</td>
+          <td>679</td>
+          <td>81</td>
+          <td class="good">163</td>
+          <td class="good">9.02x</td>
+        </tr><tr>
+          <td class="name-col">Sales Website - catalouge-nov 2024 -( Narrow )</td>
+          <td>6,396</td>
+          <td>9.6%</td>
+          <td>128</td>
+          <td>2.53</td>
+          <td>80</td>
+          <td>620</td>
+          <td>86</td>
+          <td class="good">80</td>
+          <td class="good">17.03x</td>
+        </tr><tr>
+          <td class="name-col">Sales Website - 21 Dec 2024 ( RT / LLK )</td>
+          <td>6,058</td>
+          <td>7.6%</td>
+          <td>128</td>
+          <td>2.74</td>
+          <td>36</td>
+          <td>546</td>
+          <td>71</td>
+          <td class="good">168</td>
+          <td class="good">9.02x</td>
+        </tr><tr>
+          <td class="name-col">Sales Website - Cardigans_11 Feb</td>
+          <td>5,997</td>
+          <td>6.3%</td>
+          <td>115</td>
+          <td>3.23</td>
+          <td>46</td>
+          <td>504</td>
+          <td>53</td>
+          <td class="good">130</td>
+          <td class="good">14.31x</td>
+        </tr><tr>
+          <td class="name-col">Sales Website - Catalouge - Sep 25 Sales ( Narrow ) - Cairo</td>
+          <td>5,897</td>
+          <td>9.0%</td>
+          <td>149</td>
+          <td>2.64</td>
+          <td>53</td>
+          <td>501</td>
+          <td>59</td>
+          <td class="good">111</td>
+          <td class="good">13.73x</td>
+        </tr><tr>
+          <td class="name-col">Sales Website - Menna Omran Video</td>
+          <td>5,591</td>
+          <td>10.5%</td>
+          <td>138</td>
+          <td>2.70</td>
+          <td>57</td>
+          <td>650</td>
+          <td>133</td>
+          <td class="good">98</td>
+          <td class="good">15.79x</td>
+        </tr><tr>
+          <td class="name-col">Sales Website - Prospecting_CBO</td>
+          <td>5,476</td>
+          <td>10.2%</td>
+          <td>121</td>
+          <td>2.38</td>
+          <td>63</td>
+          <td>600</td>
+          <td>74</td>
+          <td class="good">87</td>
+          <td class="good">18.09x</td>
+        </tr><tr>
+          <td class="name-col">Sales Website - Sale Only On website</td>
+          <td>5,456</td>
+          <td>6.5%</td>
+          <td>112</td>
+          <td>2.36</td>
+          <td>54</td>
+          <td>517</td>
+          <td>26</td>
+          <td class="good">101</td>
+          <td class="good">12.76x</td>
+        </tr><tr>
+          <td class="name-col">Sales Website - Summer - CA/LLK/B</td>
+          <td>4,094</td>
+          <td>5.8%</td>
+          <td>167</td>
+          <td>1.45</td>
+          <td>14</td>
+          <td>111</td>
+          <td>4</td>
+          <td class="good">292</td>
+          <td class="">4.09x</td>
+        </tr><tr>
+          <td class="name-col">Sales Website - Prospecting_CBO 2</td>
+          <td>1,694</td>
+          <td>11.7%</td>
+          <td>169</td>
+          <td>1.71</td>
+          <td>9</td>
+          <td>176</td>
+          <td>13</td>
+          <td class="good">188</td>
+          <td class="good">10.12x</td>
+        </tr><tr>
+          <td class="name-col">Sales Website - Summer Collection 2026 - Broad</td>
+          <td>534</td>
+          <td>7.0%</td>
+          <td>168</td>
+          <td>1.37</td>
+          <td>3</td>
+          <td>6</td>
+          <td>—</td>
+          <td class="good">178</td>
+          <td class="">5.89x</td>
+        </tr><tr>
+          <td class="name-col">Sales Website - Catalouge - EG - Winter</td>
+          <td>402</td>
+          <td>10.1%</td>
+          <td>120</td>
+          <td>1.70</td>
+          <td>4</td>
+          <td>94</td>
+          <td>11</td>
+          <td class="good">101</td>
+          <td class="good">6.63x</td>
+        </tr></tbody>
+      </table>
+    </div>
+
+    <div class="two-col" style="margin:16px 0">
+      <div><h3 style="color:var(--green)">✅ Winner Campaigns</h3><div class="badge-pill good">✅ Sales Website - Prospecting_CBO_Sales - Copy — 70 purchases · ROAS 18.00x · CPP 94 EGP</div><div class="badge-pill good">✅ Sales Website - 26 Nov 2024  ( Cairo / Alex ) — 40 purchases · ROAS 9.02x · CPP 163 EGP</div><div class="badge-pill good">✅ Sales Website - catalouge-nov 2024 -( Narrow  — 80 purchases · ROAS 17.03x · CPP 80 EGP</div><div class="badge-pill good">✅ Sales Website - 21 Dec 2024 ( RT / LLK ) — 36 purchases · ROAS 9.02x · CPP 168 EGP</div><div class="badge-pill good">✅ Sales Website - Cardigans_11 Feb — 46 purchases · ROAS 14.31x · CPP 130 EGP</div><div class="badge-pill good">✅ Sales Website - Catalouge - Sep 25 Sales ( Na — 53 purchases · ROAS 13.73x · CPP 111 EGP</div><div class="badge-pill good">✅ Sales Website - Menna Omran Video — 57 purchases · ROAS 15.79x · CPP 98 EGP</div><div class="badge-pill good">✅ Sales Website - Prospecting_CBO — 63 purchases · ROAS 18.09x · CPP 87 EGP</div><div class="badge-pill good">✅ Sales Website - Sale Only On website — 54 purchases · ROAS 12.76x · CPP 101 EGP</div><div class="badge-pill good">✅ Sales Website - Summer - CA/LLK/B — 14 purchases · ROAS 4.09x · CPP 292 EGP</div><div class="badge-pill good">✅ Sales Website - Prospecting_CBO 2 — 9 purchases · ROAS 10.12x · CPP 188 EGP</div><div class="badge-pill good">✅ Sales Website - Summer Collection 2026 - Broa — 3 purchases · ROAS 5.89x · CPP 178 EGP</div><div class="badge-pill good">✅ Sales Website - Catalouge - EG - Winter — 4 purchases · ROAS 6.63x · CPP 101 EGP</div></div>
+      <div><h3 style="color:var(--red)">🔴 Budget Drain</h3><p style="color:var(--muted);font-size:12px">None identified.</p></div>
+    </div>
+
+    <h3 style="color:var(--sw)">Top Performing Ads</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Ad Name</th><th>Campaign</th><th>Spend</th><th>Purchases</th>
+          <th>ROAS</th><th>CPP</th><th>Hook%</th><th>P50%</th><th>Completion%</th></tr></thead>
+        <tbody><tr>
+          <td class="name-col">catalogue - SUMMER</td>
+          <td class="xs">Sales Website - catalouge-nov 2024 </td>
+          <td>6,396</td>
+          <td class="good">80</td>
+          <td class="good">17.03x</td>
+          <td>80</td>
+          <td class="">—</td>
+          <td>—</td>
+          <td>—</td>
+        </tr><tr>
+          <td class="name-col">All Products - Sales</td>
+          <td class="xs">Sales Website - Prospecting_CBO_Sal</td>
+          <td>6,550</td>
+          <td class="good">70</td>
+          <td class="good">18.00x</td>
+          <td>94</td>
+          <td class="">—</td>
+          <td>—</td>
+          <td>—</td>
+        </tr><tr>
+          <td class="name-col">New Sales Ad - Copy 3</td>
+          <td class="xs">Sales Website - Menna Omran Video</td>
+          <td>5,591</td>
+          <td class="good">57</td>
+          <td class="good">15.79x</td>
+          <td>98</td>
+          <td class="bad">2.7%</td>
+          <td>33.7%</td>
+          <td>14.5%</td>
+        </tr><tr>
+          <td class="name-col">All Products - Sales</td>
+          <td class="xs">Sales Website - Sale Only On websit</td>
+          <td>5,458</td>
+          <td class="good">54</td>
+          <td class="good">12.76x</td>
+          <td>101</td>
+          <td class="">—</td>
+          <td>—</td>
+          <td>—</td>
+        </tr><tr>
+          <td class="name-col">catalogue - SUMMER</td>
+          <td class="xs">Sales Website - Catalouge - Sep 25 </td>
+          <td>5,897</td>
+          <td class="good">53</td>
+          <td class="good">13.73x</td>
+          <td>111</td>
+          <td class="">—</td>
+          <td>—</td>
+          <td>—</td>
+        </tr><tr>
+          <td class="name-col">All Products - Sales - arabic</td>
+          <td class="xs">Sales Website - Cardigans_11 Feb</td>
+          <td>5,999</td>
+          <td class="good">46</td>
+          <td class="good">14.31x</td>
+          <td>130</td>
+          <td class="bad">0.0%</td>
+          <td>—</td>
+          <td>—</td>
+        </tr><tr>
+          <td class="name-col">Advantage+ catalog ad - SUMMER</td>
+          <td class="xs">Sales Website - 26 Nov 2024  ( Cair</td>
+          <td>6,536</td>
+          <td class="good">40</td>
+          <td class="good">9.02x</td>
+          <td>163</td>
+          <td class="bad">0.0%</td>
+          <td>—</td>
+          <td>—</td>
+        </tr><tr>
+          <td class="name-col">Advantage+ catalogue ads - SUMMER</td>
+          <td class="xs">Sales Website - 21 Dec 2024 ( RT / </td>
+          <td>6,058</td>
+          <td class="good">36</td>
+          <td class="good">9.02x</td>
+          <td>168</td>
+          <td class="bad">0.0%</td>
+          <td>—</td>
+          <td>—</td>
+        </tr><tr>
+          <td class="name-col">All Products - Sales</td>
+          <td class="xs">Sales Website - Prospecting_CBO</td>
+          <td>3,004</td>
+          <td class="good">35</td>
+          <td class="good">17.20x</td>
+          <td>86</td>
+          <td class="">—</td>
+          <td>—</td>
+          <td>—</td>
+        </tr><tr>
+          <td class="name-col">All Products - Sales - Copy</td>
+          <td class="xs">Sales Website - Prospecting_CBO</td>
+          <td>2,472</td>
+          <td class="good">28</td>
+          <td class="good">19.16x</td>
+          <td>88</td>
+          <td class="">—</td>
+          <td>—</td>
+          <td>—</td>
+        </tr><tr>
+          <td class="name-col">All Products - Sales - Copy</td>
+          <td class="xs">Sales Website - Prospecting_CBO 2</td>
+          <td>1,694</td>
+          <td class="">9</td>
+          <td class="good">10.12x</td>
+          <td>188</td>
+          <td class="">—</td>
+          <td>—</td>
+          <td>—</td>
+        </tr><tr>
+          <td class="name-col">New Sales Ad</td>
+          <td class="xs">Sales Website - Summer - CA/LLK/B</td>
+          <td>1,683</td>
+          <td class="">8</td>
+          <td class="">3.94x</td>
+          <td>210</td>
+          <td class="">—</td>
+          <td>—</td>
+          <td>—</td>
+        </tr><tr>
+          <td class="name-col">New Sales Ad</td>
+          <td class="xs">Sales Website - Summer - CA/LLK/B</td>
+          <td>1,738</td>
+          <td class="">5</td>
+          <td class="">5.25x</td>
+          <td>348</td>
+          <td class="">—</td>
+          <td>—</td>
+          <td>—</td>
+        </tr><tr>
+          <td class="name-col">WINTER</td>
+          <td class="xs">Sales Website - Catalouge - EG - Wi</td>
+          <td>402</td>
+          <td class="">4</td>
+          <td class="good">6.63x</td>
+          <td>101</td>
+          <td class="">—</td>
+          <td>—</td>
+          <td>—</td>
+        </tr><tr>
+          <td class="name-col">New Sales Ad</td>
+          <td class="xs">Sales Website - Summer Collection 2</td>
+          <td>535</td>
+          <td class="">3</td>
+          <td class="">5.88x</td>
+          <td>178</td>
+          <td class="">—</td>
+          <td>—</td>
+          <td>—</td>
+        </tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="insight-grid">
+    <div class="insight good"><h4>✅ "Prospecting_CBO – Copy" is the top earner</h4><p>70 purchases · 9.021x ROAS · 6,550 EGP spend. Strong CBO structure is working.</p></div>
+    <div class="insight good"><h4>✅ "Menna Omran Video" stands out</h4><p>57 purchases · highest ROAS in SW campaigns. Video creative is clearly resonating — scale it.</p></div>
+    <div class="insight warn"><h4>⚠️ "Summer" campaigns need more data</h4><p>Summer Collection + Summer Broad are new. Give them 7–10 days and 5x CPP budget before judging performance.</p></div>
+    <div class="insight bad"><h4>🔴 "Sale Only On Website" has high CPM</h4><p>Check audience size — high CPM often means audience is too narrow or has overlapping exclusions.</p></div>
+  </div>
+</section>
+
+<!-- ═══════════ 6. POST ENGAGEMENT ═══════════ -->
+<section id="pe">
+  <span class="sec-badge pe">Section 6 · Post Engagement</span>
+  <h2 class="pe">👍 Post Engagement Campaigns</h2>
+
+  <div class="obj-kpi-row">
+    <div class="obj-kpi pe"><div class="label">Total Spend</div><div class="value">33,524</div><div class="sub">EGP</div></div>
+    <div class="obj-kpi pe"><div class="label">Share of Budget</div><div class="value">35%</div><div class="sub"></div></div>
+    <div class="obj-kpi pe"><div class="label">Purchases</div><div class="value" style="color:#ef4444">0</div><div class="sub">direct</div></div>
+    <div class="obj-kpi pe"><div class="label">Engagements</div><div class="value">37</div><div class="sub">reactions + msgs</div></div>
+    <div class="obj-kpi pe"><div class="label">CPM</div><div class="value">44</div><div class="sub">EGP</div></div>
+    <div class="obj-kpi pe"><div class="label">Campaigns</div><div class="value">3</div><div class="sub"></div></div>
+  </div>
+
+  <div class="obj-section pe">
+    <h3 style="color:var(--pe)">Campaign Breakdown</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Campaign</th><th>Spend</th><th>CTR</th><th>CPM</th><th>Freq</th>
+          <th>Purchases</th><th>ATC</th><th>Messages</th><th>CPP</th><th>ROAS</th></tr></thead>
+        <tbody><tr>
+          <td class="name-col">Post Engagement - April 2026</td>
+          <td>31,529</td>
+          <td>2.1%</td>
+          <td>46</td>
+          <td>2.48</td>
+          <td>—</td>
+          <td>8</td>
+          <td>19</td>
+          <td class="">—</td>
+          <td class="">—</td>
+        </tr><tr>
+          <td class="name-col">Post Engagement - March 2026</td>
+          <td>1,994</td>
+          <td>1.1%</td>
+          <td>19</td>
+          <td>1.30</td>
+          <td>—</td>
+          <td>3</td>
+          <td>4</td>
+          <td class="">—</td>
+          <td class="">—</td>
+        </tr><tr>
+          <td class="name-col">Post Engagement - Branches</td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+          <td>3</td>
+          <td class="">—</td>
+          <td class="">—</td>
+        </tr></tbody>
+      </table>
+    </div>
+
+    <h3 style="color:var(--pe);margin-top:16px">Ads Detail</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Ad Name</th><th>Campaign</th><th>Spend</th><th>Impressions</th>
+          <th>CTR</th><th>CPM</th><th>Total Engagements</th><th>Messages</th></tr></thead>
+        <tbody><tr>
+          <td class="name-col">Mar 31, 2026</td>
+          <td class="xs">Post Engagement - March 2026</td>
+          <td>1,000</td>
+          <td>35,409</td>
+          <td>3.0%</td>
+          <td>28</td>
+          <td style="color:var(--accent2);font-weight:600">1</td>
+          <td>1</td>
+        </tr><tr>
+          <td class="name-col">Apr 2, 2026</td>
+          <td class="xs">Post Engagement - April 2026</td>
+          <td>1,000</td>
+          <td>21,783</td>
+          <td>3.9%</td>
+          <td>46</td>
+          <td style="color:var(--accent2);font-weight:600">0</td>
+          <td>—</td>
+        </tr><tr>
+          <td class="name-col">Apr 7, 2026</td>
+          <td class="xs">Post Engagement - April 2026</td>
+          <td>1,000</td>
+          <td>11,853</td>
+          <td>5.9%</td>
+          <td>84</td>
+          <td style="color:var(--accent2);font-weight:600">3</td>
+          <td>1</td>
+        </tr><tr>
+          <td class="name-col">Apr 2, 2026</td>
+          <td class="xs">Post Engagement - April 2026</td>
+          <td>1,000</td>
+          <td>37,992</td>
+          <td>0.3%</td>
+          <td>26</td>
+          <td style="color:var(--accent2);font-weight:600">0</td>
+          <td>—</td>
+        </tr><tr>
+          <td class="name-col">Apr 17, 2026</td>
+          <td class="xs">Post Engagement - April 2026</td>
+          <td>1,000</td>
+          <td>28,904</td>
+          <td>0.3%</td>
+          <td>35</td>
+          <td style="color:var(--accent2);font-weight:600">0</td>
+          <td>—</td>
+        </tr><tr>
+          <td class="name-col">Apr 5, 2026</td>
+          <td class="xs">Post Engagement - April 2026</td>
+          <td>1,000</td>
+          <td>21,654</td>
+          <td>5.0%</td>
+          <td>46</td>
+          <td style="color:var(--accent2);font-weight:600">6</td>
+          <td>6</td>
+        </tr><tr>
+          <td class="name-col">Apr 15, 2026</td>
+          <td class="xs">Post Engagement - April 2026</td>
+          <td>999</td>
+          <td>22,354</td>
+          <td>0.4%</td>
+          <td>45</td>
+          <td style="color:var(--accent2);font-weight:600">1</td>
+          <td>1</td>
+        </tr><tr>
+          <td class="name-col">Apr 17, 2026</td>
+          <td class="xs">Post Engagement - April 2026</td>
+          <td>999</td>
+          <td>15,492</td>
+          <td>9.2%</td>
+          <td>65</td>
+          <td style="color:var(--accent2);font-weight:600">5</td>
+          <td>4</td>
+        </tr><tr>
+          <td class="name-col">Apr 3, 2026</td>
+          <td class="xs">Post Engagement - April 2026</td>
+          <td>999</td>
+          <td>23,677</td>
+          <td>0.3%</td>
+          <td>42</td>
+          <td style="color:var(--accent2);font-weight:600">1</td>
+          <td>1</td>
+        </tr><tr>
+          <td class="name-col">Apr 15, 2026</td>
+          <td class="xs">Post Engagement - April 2026</td>
+          <td>999</td>
+          <td>8,525</td>
+          <td>8.0%</td>
+          <td>117</td>
+          <td style="color:var(--accent2);font-weight:600">0</td>
+          <td>—</td>
+        </tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="insight-grid">
+    <div class="insight bad"><h4>🔴 "Post Engagement – April 2026" = 31,529 EGP, 0 Purchases</h4><p>Largest single spend item in PE. If the goal is brand awareness / social proof, define a KPI for it (CPE, reach, follower growth). If the goal is sales — pause it immediately.</p></div>
+    <div class="insight warn"><h4>⚠️ Define the Purpose</h4><p>Post Engagement campaigns are not meant to drive purchases. Are they being used to warm audiences before retargeting? If not, this budget should move to Sales Website campaigns.</p></div>
+    <div class="insight"><h4>💡 Better Use of PE Budget</h4><p>If you keep PE: target people who watched 50%+ of your videos, then retarget them with a Sales Website campaign. Turns awareness spend into a funnel.</p></div>
+  </div>
+</section>
+
+<!-- ═══════════ 7. SALES MESSAGES ═══════════ -->
+<section id="sm">
+  <span class="sec-badge sm">Section 7 · Sales Messages</span>
+  <h2 class="sm">💬 Sales Messages Campaigns</h2>
+
+  <div class="obj-kpi-row">
+    <div class="obj-kpi sm"><div class="label">Total Spend</div><div class="value">2,365</div><div class="sub">EGP</div></div>
+    <div class="obj-kpi sm"><div class="label">Share of Budget</div><div class="value">2%</div><div class="sub"></div></div>
+    <div class="obj-kpi sm"><div class="label">Purchases</div><div class="value">3</div><div class="sub"></div></div>
+    <div class="obj-kpi sm"><div class="label">Messages</div><div class="value">305</div><div class="sub">conversations</div></div>
+    <div class="obj-kpi sm"><div class="label">CPM</div><div class="value">42</div><div class="sub">EGP</div></div>
+    <div class="obj-kpi sm"><div class="label">Campaigns</div><div class="value">1</div><div class="sub"></div></div>
+  </div>
+
+  <div class="obj-section sm">
+    <h3 style="color:var(--sm)">Campaign Breakdown</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Campaign</th><th>Spend</th><th>CTR</th><th>CPM</th><th>Freq</th>
+          <th>Purchases</th><th>ATC</th><th>Messages</th><th>CPP</th><th>ROAS</th></tr></thead>
+        <tbody><tr>
+          <td class="name-col">Sales Messages _ 5 Feb</td>
+          <td>2,365</td>
+          <td>6.9%</td>
+          <td>42</td>
+          <td>2.98</td>
+          <td>3</td>
+          <td>40</td>
+          <td>305</td>
+          <td class="bad">788</td>
+          <td class="bad">2.88x</td>
+        </tr></tbody>
+      </table>
+    </div>
+
+    <h3 style="color:var(--sm);margin-top:16px">Ads Detail</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Ad Name</th><th>Campaign</th><th>Spend</th><th>Messages</th>
+          <th>Purchases</th><th>CPP</th><th>CTR</th><th>CPM</th></tr></thead>
+        <tbody><tr>
+          <td class="name-col">Mar 27, 2026</td>
+          <td class="xs">Sales Messages _ 5 Feb</td>
+          <td>1,462</td>
+          <td style="color:var(--yellow);font-weight:700">215</td>
+          <td>3</td>
+          <td>487</td>
+          <td>7.6%</td>
+          <td>42</td>
+        </tr><tr>
+          <td class="name-col">Mar 29, 2026</td>
+          <td class="xs">Sales Messages _ 5 Feb</td>
+          <td>631</td>
+          <td style="color:var(--yellow);font-weight:700">61</td>
+          <td>—</td>
+          <td>—</td>
+          <td>5.6%</td>
+          <td>39</td>
+        </tr><tr>
+          <td class="name-col">Mar 28, 2026</td>
+          <td class="xs">Sales Messages _ 5 Feb</td>
+          <td>271</td>
+          <td style="color:var(--yellow);font-weight:700">27</td>
+          <td>—</td>
+          <td>—</td>
+          <td>6.6%</td>
+          <td>60</td>
+        </tr><tr>
+          <td class="name-col">Mar 1, 2026</td>
+          <td class="xs">Sales Messages _ 5 Feb</td>
+          <td>—</td>
+          <td style="color:var(--yellow);font-weight:700">1</td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+        </tr><tr>
+          <td class="name-col">Feb 27, 2026</td>
+          <td class="xs">Sales Messages _ 5 Feb</td>
+          <td>—</td>
+          <td style="color:var(--yellow);font-weight:700">1</td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+        </tr><tr>
+          <td class="name-col">Feb 25, 2026</td>
+          <td class="xs">Sales Messages _ 5 Feb</td>
+          <td>—</td>
+          <td style="color:var(--yellow);font-weight:700">—</td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+        </tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="insight-grid">
+    <div class="insight warn"><h4>⚠️ High Message Volume, Low Purchases</h4><p>305 conversations from "Sales Messages_5 Feb" but only 3 purchases. Conversation-to-purchase rate is ~1%. Either close rate needs improvement or this objective isn't efficient for sales.</p></div>
+    <div class="insight"><h4>💡 Messages as a Warm Audience</h4><p>People who messaged are warm leads. Create a Custom Audience of "people who sent messages" and retarget them with a Sales Website campaign with a special offer.</p></div>
+    <div class="insight warn"><h4>⚠️ Cost per Message</h4><p>2,365 EGP / 305 messages = ~7.8 EGP per message. If your sales team converts 5% of conversations, that's ~156 EGP CPP from messages. Compare to Sales Website CPP to decide which is better.</p></div>
+  </div>
+</section>
+
+<!-- ═══════════ 8. PROBLEMS ═══════════ -->
+<section id="problems">
+  <span class="sec-badge def">Section 8</span>
+  <h2>⚠️ Identified Problems</h2>
+  <div class="two-col">
+    <div>
+      <div style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);border-radius:11px;padding:15px 18px;margin-bottom:12px">
+        <h4 style="color:var(--red);margin-bottom:8px">🔴 Problem 1: Post Engagement burns 33% of budget</h4>
+        <ul style="padding-left:16px;color:var(--muted);line-height:2;font-size:12px">
+          <li>33,524 EGP spent with 0 purchase conversions</li>
+          <li>No clear ROI link to sales funnel</li>
+          <li>Reallocating to Sales Website = ~184 extra purchases/month</li>
+        </ul>
+      </div>
+      <div style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);border-radius:11px;padding:15px 18px;margin-bottom:12px">
+        <h4 style="color:var(--red);margin-bottom:8px">🔴 Problem 2: Funnel drop-offs</h4>
+        <ul style="padding-left:16px;color:var(--muted);line-height:2;font-size:12px">
+          <li>VC → ATC: only 8.4% (should be 15–25%)</li>
+          <li>ATC → Checkout: only 19.4% (should be 60–75%)</li>
+          <li>Checkout → Purchase: only 46.1% (should be 65–80%)</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);border-radius:11px;padding:15px 18px;margin-bottom:12px">
+        <h4 style="color:var(--red);margin-bottom:8px">🔴 Problem 3: High Frequency (1.53x)</h4>
+        <ul style="padding-left:16px;color:var(--muted);line-height:2;font-size:12px">
+          <li>Same audience seeing same ads too often</li>
+          <li>Risk of ad fatigue → rising CPM and falling CTR</li>
+          <li>Need fresh creatives and/or audience expansion</li>
+        </ul>
+      </div>
+      <div style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);border-radius:11px;padding:15px 18px;margin-bottom:12px">
+        <h4 style="color:var(--red);margin-bottom:8px">🔴 Problem 4: No retargeting stack</h4>
+        <ul style="padding-left:16px;color:var(--muted);line-height:2;font-size:12px">
+          <li>5,410 cart abandoners with no follow-up</li>
+          <li>305 messages leads not retargeted for purchase</li>
+          <li>PE video viewers not funneled into sales campaigns</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+</section>
+
+<!-- ═══════════ 9. INSIGHTS & RECOMMENDATIONS ═══════════ -->
+<section id="insights">
+  <span class="sec-badge def">Section 9</span>
+  <h2>💡 Strategic Insights & Recommendations</h2>
+  <div class="insight-grid">
+    <div class="insight good">
+      <h4>🚀 Priority 1: Scale "Menna Omran Video"</h4>
+      <p>Highest ROAS in the account. Increase budget +30–50% every 3 days while ROAS stays above 6x. Test in new audiences (LLK 1–3%).</p>
+    </div>
+    <div class="insight good">
+      <h4>🚀 Priority 2: Duplicate Top CBO Campaigns</h4>
+      <p>"Prospecting_CBO" and "Prospecting_CBO – Copy" are both winners. Create a 3rd duplicate with a new creative set to extend performance.</p>
+    </div>
+    <div class="insight bad">
+      <h4>⛔ Priority 3: Pause or Justify Post Engagement April</h4>
+      <p>31,529 EGP with 0 purchases. If this is for social proof/follower growth — set a KPI and cap the budget. If for sales — pause immediately.</p>
+    </div>
+    <div class="insight warn">
+      <h4>🔁 Priority 4: Build Retargeting Campaigns</h4>
+      <p>ATC retargeting (7d) + Checkout retargeting (3d) + Messages audience retargeting. These are near-buyers — lowest CPP to convert.</p>
+    </div>
+    <div class="insight warn">
+      <h4>📹 Priority 5: New Video Creatives</h4>
+      <p>Frequency 1.53x signals saturation. Produce 3–5 new video ads monthly. Use: UGC, before/after, product demos, social proof.</p>
+    </div>
+    <div class="insight">
+      <h4>📊 Priority 6: Track Message-to-Purchase Rate</h4>
+      <p>Add purchase tracking to the Messages funnel. If your team closes &gt;10% of conversations, Sales Messages may be undervalued. If &lt;5%, reallocate to Sales Website.</p>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<script>
+const labels = ["04-01", "04-02", "04-03", "04-04", "04-05", "04-06", "04-07", "04-08", "04-09", "04-10", "04-11", "04-12", "04-13", "04-14", "04-15", "04-16", "04-17", "04-18", "04-19", "04-20", "04-21", "04-22"];
+const spends = [5002.6, 3753.5, 3877.7, 3341.6, 2673.7, 3241.8, 6741.7, 7876.4, 2301.2, 2344.1, 2091.6, 2634.1, 2682.2, 2384.0, 5069.0, 7306.5, 6748.1, 2269.8, 4304.3, 7884.2, 9589.2, 2461.0];
+const ctrs   = [2.58, 3.16, 3.31, 3.99, 8.92, 5.35, 3.72, 2.97, 9.18, 9.29, 8.61, 8.0, 8.5, 9.04, 4.51, 3.97, 3.47, 8.37, 5.22, 4.75, 4.38, 5.73];
+const dpurs  = [27, 31, 22, 20, 28, 24, 25, 24, 15, 20, 23, 24, 15, 20, 18, 23, 26, 22, 27, 42, 39, 17];
+const grid   = 'rgba(255,255,255,0.05)';
+const base   = () => ({responsive:true,plugins:{legend:{display:false},tooltip:{mode:'index'}},scales:{x:{ticks:{color:'#64748b',maxRotation:45},grid:{color:grid}},y:{ticks:{color:'#64748b'},grid:{color:grid}}}});
+
+new Chart(document.getElementById('spendChart'),{type:'bar',data:{labels,datasets:[{label:'Spend',data:spends,backgroundColor:'rgba(108,99,255,0.7)',borderColor:'#6c63ff',borderWidth:1}]},options:base()});
+new Chart(document.getElementById('purChart'),{type:'bar',data:{labels,datasets:[{label:'Purchases',data:dpurs,backgroundColor:'rgba(34,197,94,0.7)',borderColor:'#22c55e',borderWidth:1}]},options:base()});
+new Chart(document.getElementById('splitChart'),{type:'doughnut',
+  data:{labels:["Sales Website", "Post Engagement", "Sales Messages"],datasets:[{data:[60682.0, 33523.7, 2364.5],backgroundColor:['rgba(108,99,255,0.8)','rgba(6,182,212,0.8)','rgba(245,158,11,0.8)'],borderWidth:0}]},
+  options:{responsive:true,plugins:{legend:{position:'bottom',labels:{color:'#e2e8f0',font:{size:12}}},tooltip:{callbacks:{label:function(c){return c.label+': '+c.raw.toLocaleString()+' EGP'}}}}}
+});
+new Chart(document.getElementById('ctrChart'),{type:'line',data:{labels,datasets:[{label:'CTR%',data:ctrs,borderColor:'#06b6d4',backgroundColor:'rgba(6,182,212,0.1)',tension:0.4,fill:true,pointRadius:3}]},options:base()});
+</script>
+</body>
+</html>
